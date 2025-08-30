@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="default">
+    <!-- Configuración de la física Alta precisión (iters=100, erp=0.9, max_step_size=0.001) Estabilidad en contactos (ideal para robots/drones) Actualizaciones rápidas si tu hardware lo soporta.-->
+    <physics type="ode">
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>100</iters>
+          <sor>1.0</sor>
+        </solver>
+        <constraints>
+          <cfm>0.0</cfm>
+          <erp>0.9</erp>
+          <contact_max_correcting_vel>0.1</contact_max_correcting_vel>
+          <contact_surface_layer>0.0</contact_surface_layer>
+        </constraints>
+      </ode>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <max_step_size>0.001</max_step_size>
+    </physics>
+<!-- Cámara inicial -->
+<gui>
+  <camera name="user_camera">
+    <pose>-1.28 2.93 1.93 0 0.13 -0.99</pose> <!-- X Y Z Roll Pitch Yaw  -45 59 19 0 0 -0.90-->
+  </camera>
+</gui>
+
+   <!-- Escena visual -->
+    <scene>
+      <ambient>0.6 0.6 0.5 0.5</ambient> <!-- Luz ambiental cálida media -->
+      <background>0.8 0.8 1.0 1</background> <!-- Color de fondo azul cielo claro -->
+      <shadows>false</shadows> <!-- Sombras desactivadas, puedes activar si prefieres mayor realismo -->
+
+      <sky>
+        <clouds>
+          <speed>5</speed> <!-- Velocidad de movimiento de nubes ( razonable dado viento) -->
+          <direction>0.5 0</direction> <!-- Dirección desde el oeste hacia el este -->
+          <mean_size>0.4</mean_size> <!-- Tamaño medio de nubes -->
+          <humidity>0.8</humidity> <!-- Humedad alta, típico del trópico -->
+        </clouds>
+      </sky>
+
+      <!-- Viento constante promedio -->
+      <wind>
+        <linear_velocity>3 0 0</linear_velocity> <!-- ~3 m/s (~6.7 mph) en dirección +X -->
+      </wind>
+
+      <!-- Plugin para ráfagas dinámicas -->
+      <plugin name="dynamic_wind" filename="libgazebo_wind_plugin.so">
+        <mean_wind>3 0 0</mean_wind> <!-- Viento promedio -->
+        <turbulence>7 0 0</turbulence> <!-- Ráfagas ±7 m/s hasta ~25 m/s máximo registrados -->
+        <frequency>0.5</frequency> <!-- Cambio de ráfagas cada ~2 segundos (0.5 Hz) -->
+      </plugin>
+    </scene>
+
+<light name="left_light" type="directional">
+  <pose>0 5 52 0 0 0</pose> <!-- X Y Z R P Y -->
+  <diffuse>0.7 0.7 1 1</diffuse>
+  <specular>0.2 0.2 0.2 1</specular>
+  <attenuation>
+    <range>20</range>
+    <constant>0.5</constant>
+    <linear>0.01</linear>
+    <quadratic>0.001</quadratic>
+  </attenuation>
+  <direction>-1 -1 0</direction> <!-- Luz que apunta desde la izquierda hacia la derecha -->
+  <cast_shadows>true</cast_shadows>
+</light>
+
+<!--gg de derecho a ixquiedo luz-->
+
+
+<light name="right_light" type="directional">
+  <pose>0 -45 2 0 0 0</pose>
+  <diffuse>1 1 1 1</diffuse>
+  <specular>0.2 0.2 0.2 1</specular>
+  <attenuation>
+    <range>20</range>
+    <constant>0.5</constant>
+    <linear>0.01</linear>
+    <quadratic>0.001</quadratic>
+  </attenuation>
+  <direction>1 1 0</direction>
+  <cast_shadows>true</cast_shadows>
+</light>
+
+    <!-- Terreno: modelo plano del suelo -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>5000 5000</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+
+        <!-- Visual del terreno con mesh -->
+        <visual name="grass">
+          <pose>0 0 -0.1 0 0 0</pose>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>300 500</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grass</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+ <light name="sun_sim" type="directional">
+  <pose>-20 10 30 0.3 0.3 0</pose> <!-- Más bajo y con inclinación -->
+  <diffuse>0.9 0.8 0.9 0.8</diffuse> <!-- Luz más cálida, efecto atardecer -->
+  <specular>2 2 1.5 1</specular>
+  <attenuation>
+    <range>1000</range>
+    <constant>0.5</constant>
+    <linear>0.01</linear>
+    <quadratic>0.001</quadratic>
+  </attenuation>
+  <direction>1 -1.02 -0.99</direction> <!-- Luz descendente-->
+  <cast_shadows>true</cast_shadows>
+</light>
+
+
+
+    <!-- Incluir el sol  
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    -->
+   
+
+    
+     <include>
+      <uri>model://entorno_emi</uri>
+      <pose>-6.297 -14.168 0 0 0 0</pose>
+    </include>
+
+    <!-- Incluir dron con cámara -->
+    <include>
+      <uri>model://drone_with_camera</uri>
+      <pose>0.3 0 1 0 0 0</pose>
+    </include>
+
+    <model name="ground_observer_camera">
+  <static>true</static>
+  <pose>0.67 -0.98 0.96 0 -0.28 1.98</pose>
+  <link name="observer_camera_link">
+    <sensor name="observer_camera" type="camera">
+      <update_rate>30</update_rate>
+      <visualize>true</visualize>
+      <camera>
+        <horizontal_fov>1.3089969</horizontal_fov> <!-- ~75° -->
+        <image>
+          <width>960</width>
+          <height>720</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>150</far>
+        </clip>
+      </camera>
+      <plugin name="observer_camera_plugin" filename="libgazebo_ros_camera.so">
+        <always_on>true</always_on>
+        <update_rate>30</update_rate>
+        <cameraName>observer_camera</cameraName>
+        <imageTopicName>observer_camera/image_raw</imageTopicName>
+        <cameraInfoTopicName>observer_camera/camera_info</cameraInfoTopicName>
+        <frameName>observer_camera_link</frameName>
+      </plugin>
+    </sensor>
+  </link>
+</model>
+
+  </world>
+</sdf>

@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="campo_libre">
+    <static>true</static>
+    <link name="emi_link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://campo_libre/meshes/campo.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://campo_libre/meshes/campo.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <uri>model://campo_libre/materials/textures</uri>
+  </material>
+      </collision>
+    </link>
+  </model>
+</sdf>

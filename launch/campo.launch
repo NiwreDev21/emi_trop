@@ -1,0 +1,9 @@
+<launch>
+  <!-- Resumimos la lógica en empty_world.launch, cambiando solo el nombre del mundo a lanzar -->
+  <arg name="gui" default="true"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find emi_trop)/worlds/campo_libre.world"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+</launch>

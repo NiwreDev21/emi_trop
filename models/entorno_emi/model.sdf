@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="entorno_emi">
+    <static>true</static>
+    <link name="emi_link">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://entorno_emi/meshes/bien.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <mesh>
+            <uri>model://entorno_emi/meshes/bien.dae</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <uri>model://entorno_emi/materials/textures</uri>
+  
+  </material>
+      </collision>
+    </link>
+  </model>
+</sdf>
