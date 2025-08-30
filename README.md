@@ -1,4 +1,5 @@
 # SIMULADOR PARA EL ENTRENAMIENTO EN EL PILOTAJE DE UN CUADRICOPTERO EN ENTRONOS VIRTUALES
+El proyecto es una estación de control terrestre para drones, con una interfaz gráfica construida en PyQt5, que se integra con ROS (Robot Operating System) y Gazebo para simular y controlar un dron.
 ## Proyecto de Trabajo de Grado
 ![emi](config/INTRO.png)
 ## Interfaz Estacion de Control
