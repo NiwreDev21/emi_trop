@@ -1,6 +1,12 @@
 # SIMULADOR PARA EL ENTRENAMIENTO EN EL PILOTAJE DE UN CUADRICOPTERO EN ENTRONOS VIRTUALES
 ## Proyecto de Trabajo de Grado
 ![emi](config/INTRO.png)
+## Interfaz Estacion de Control
+Simulacion iniciada
+![emi](config/inicio.jpeg)
+![emi](config/interfaz.jpeg)
+![emi](config/funcional.jpeg)
+
 ## Software Development Tutorials
 [Installing Ardupilot and MAVProxy](Install/ArduPillot-20.04.md)
 
