@@ -2,4 +2,5 @@
 ## Proyecto de Trabajo de Grado
 ![emi](config/INTRO.png)
 ## Software Development Tutorials
-[Installing Ardupilot and MAVProxy]](Install/ArduPillot-20.04.md)
+[Installing Ardupilot and MAVProxy](Install/ArduPilot-20.04.md)
+
