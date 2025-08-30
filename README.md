@@ -14,12 +14,13 @@ Simulacion iniciada
 ![emi](config/3D.png)
 
 ## Ejecucion del Simulador
-Inicia el mundo de Gazebo
-```roslaunch emi_trop emilaunch.launch```
+Inicia el mundo de Gazebo.
 
-Ejecutar en otra terminal el SITL
+```bash roslaunch emi_trop emilaunch.launch```
 
-```cd ~/ardupilot/ArduCopter/ && sim_vehicle.py -v ArduCopter -f gazebo-iris --console --location emi```
+Ejecutar en otra terminal el SITL.
+
+```bash cd ~/ardupilot/ArduCopter/ && sim_vehicle.py -v ArduCopter -f gazebo-iris --console --location emi```
 
 ## References 
 http://ardupilot.org/copter/index.html
