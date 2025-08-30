@@ -10,6 +10,9 @@ Simulacion iniciada
 ## Software Development Tutorials
 [Installing Ardupilot and MAVProxy](Install/ArduPillot-20.04.md)
 
+## Modelo 3D EMI
+![emi](config/3D.png)
+
 ## References 
 http://ardupilot.org/copter/index.html
 
