@@ -67,9 +67,8 @@ class DroneGUIUI:
             ("🚀", "ROS", "ros"),
             ("✈️", "ArduPilot", "ardupilot"),
             ("📡", "Telemetría", "telemetria"),
-            ("🗺️", "MAVProxy Map", "mavproxy"),
             ("🔄", "Reset World", "reset_world"),
-            ("🛰️", "QGroundControl", "qgroundcontrol"),
+            ("🛰️", "QGroundControl", "qgroundcontrol"),  # NUEVO BOTÓN
             ("❌", "Cerrar", "cerrar")
         ]
         
@@ -117,53 +116,11 @@ class DroneGUIUI:
         self.btn_cam.setMaximumWidth(200)
         center_layout.addWidget(self.btn_cam, alignment=Qt.AlignLeft)
         
-        # Layout para control de cámara, telemetría y mapa en la misma fila
+        # Layout para control de cámara y telemetría en la misma fila
         bottom_row_layout = QHBoxLayout()
         bottom_row_layout.setSpacing(10)
         
-        # Panel de mapa MAVProxy (NUEVO)
-        map_group = QGroupBox("🗺️ Mapa MAVProxy")
-        map_group.setMaximumWidth(300)
-        map_layout = QVBoxLayout()
-        
-        # Label para mostrar el mapa
-        self.map_label = QLabel()
-        self.map_label.setAlignment(Qt.AlignCenter)
-        self.map_label.setStyleSheet("""
-            background-color: #1a1a1a;
-            border: 2px solid #444;
-            border-radius: 8px;
-            color: #ccc;
-            font-family: 'Monospace';
-            font-size: 10px;
-            padding: 5px;
-        """)
-        self.map_label.setMinimumSize(280, 180)
-        self.map_label.setText("Mapa MAVProxy\n---\nEsperando conexión...")
-        
-        # Layout para controles del mapa
-        map_controls_layout = QHBoxLayout()
-        self.map_status = QLabel("Estado: Inactivo")
-        self.map_status.setStyleSheet("color: #ff6666; font-size: 10px;")
-        self.btn_refresh_map = QPushButton("🔄")
-        self.btn_refresh_map.setMaximumSize(25, 25)
-        self.btn_toggle_map = QPushButton("🗺️")
-        self.btn_toggle_map.setMaximumSize(25, 25)
-        self.btn_toggle_map.setToolTip("Alternar visibilidad del mapa")
-        
-        map_controls_layout.addWidget(self.map_status)
-        map_controls_layout.addStretch()
-        map_controls_layout.addWidget(self.btn_toggle_map)
-        map_controls_layout.addWidget(self.btn_refresh_map)
-        
-        map_layout.addWidget(self.map_label)
-        map_layout.addLayout(map_controls_layout)
-        map_group.setLayout(map_layout)
-        
-        # Barra de telemetría
-        self.telemetry_bar = self.create_telemetry_bar()
-        
-        # Control de cámara con joystick
+        # Control de cámara con joystick (a la derecha)
         cam_group = QGroupBox("Control Cámara Observer")
         cam_group.setMaximumWidth(300)
         cam_layout = QHBoxLayout()
@@ -194,10 +151,12 @@ class DroneGUIUI:
         cam_layout.addLayout(angle_layout)
         cam_group.setLayout(cam_layout)
         
-        # Añadir a la fila inferior (mapa, telemetría, joystick)
-        bottom_row_layout.addWidget(map_group, stretch=1)      # Mapa
-        bottom_row_layout.addWidget(self.telemetry_bar, stretch=2)  # Telemetría
-        bottom_row_layout.addWidget(cam_group, stretch=1)     # Joystick
+        # Barra de telemetría (se expandirá para llenar el espacio)
+        self.telemetry_bar = self.create_telemetry_bar()
+        
+        # Añadir a la fila inferior (telemetría a la izquierda, joystick a la derecha)
+        bottom_row_layout.addWidget(self.telemetry_bar, stretch=3)
+        bottom_row_layout.addWidget(cam_group, stretch=1)
         
         center_layout.addLayout(bottom_row_layout)
         

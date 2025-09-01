@@ -2,10 +2,9 @@ import cv2
 import subprocess
 from threading import Thread
 from PyQt5.QtGui import QPixmap, QImage
-from PyQt5.QtCore import Qt, QProcess
+from PyQt5.QtCore import Qt
 import os
 import time
-import signal
 
 def cv2_to_pixmap(cv_img, width, height):
     try:

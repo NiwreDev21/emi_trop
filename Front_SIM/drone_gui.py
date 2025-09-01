@@ -1,3 +1,4 @@
+# drone_gui.py
 import sys
 import os
 import rospy
@@ -27,8 +28,6 @@ class DroneGUI(QWidget):
         self.subscriptions_active = False
         self.left_menu_expanded = False
         self.right_panel_expanded = False
-        self.mavproxy_running = False
-        self.map_visible = True
         
         self.ui = DroneGUIUI(self)
         self.ui.setup_ui()
@@ -43,12 +42,7 @@ class DroneGUI(QWidget):
         self.camera_timer.timeout.connect(self.auto_focus_camera)
         self.camera_timer.start(50)
         
-        # Timer para actualizar el mapa
-        self.map_timer = QTimer()
-        self.map_timer.timeout.connect(self.update_map_display)
-        self.map_timer.start(1000)  # Actualizar cada segundo
-        
-        self.setMinimumSize(1400, 900)
+        self.setMinimumSize(1200, 800)
         
     def _connect_signals(self):
         """Conectar todas las señales de la interfaz"""
@@ -63,88 +57,14 @@ class DroneGUI(QWidget):
         self.ui.system_buttons['ros'].clicked.connect(launch_ros)
         self.ui.system_buttons['ardupilot'].clicked.connect(launch_ardupilot)
         self.ui.system_buttons['telemetria'].clicked.connect(launch_apm)
-        self.ui.system_buttons['mavproxy'].clicked.connect(self.toggle_mavproxy)
         self.ui.system_buttons['reset_world'].clicked.connect(self.reset_world)
-        self.ui.system_buttons['qgroundcontrol'].clicked.connect(self.launch_qgc)
+        self.ui.system_buttons['qgroundcontrol'].clicked.connect(self.launch_qgc)  # NUEVA CONEXIÓN
         self.ui.system_buttons['cerrar'].clicked.connect(close_gazebo)
         
         self.ui.btn_cam.clicked.connect(self.toggle_cameras)
-        self.ui.btn_refresh_map.clicked.connect(self.refresh_map)
-        self.ui.btn_toggle_map.clicked.connect(self.toggle_map_visibility)
         
         self.ui.climate_panel.apply_btn.clicked.connect(self.apply_climate_settings)
         self.ui.climate_panel.reset_btn.clicked.connect(self.reset_climate_settings)
-        
-    def toggle_mavproxy(self):
-        """Activar/desactivar visualización de mapa MAVProxy"""
-        self.mavproxy_running = not self.mavproxy_running
-        
-        if self.mavproxy_running:
-            self.ui.map_status.setText("Estado: Simulando")
-            self.ui.map_status.setStyleSheet("color: #66ff66; font-size: 10px;")
-            self.show_message("🗺️ Mapa MAVProxy", "Visualización de mapa activada")
-        else:
-            self.ui.map_status.setText("Estado: Inactivo")
-            self.ui.map_status.setStyleSheet("color: #ff6666; font-size: 10px;")
-            self.ui.map_label.setText("Mapa MAVProxy\n---\nDesactivado")
-            self.show_message("🗺️ Mapa MAVProxy", "Visualización de mapa desactivada")
-            
-    def refresh_map(self):
-        """Refrescar la visualización del mapa"""
-        if self.mavproxy_running:
-            self.ui.map_label.setText("Actualizando mapa...\nEspere por favor")
-            self.show_message("🗺️ Mapa", "Actualizando visualización del mapa")
-        else:
-            self.show_message("❌ Error", "MAVProxy no está activo")
-            
-    def toggle_map_visibility(self):
-        """Alternar visibilidad del mapa"""
-        self.map_visible = not self.map_visible
-        
-        if self.map_visible:
-            self.ui.map_label.show()
-            self.ui.btn_toggle_map.setStyleSheet("")
-        else:
-            self.ui.map_label.hide()
-            self.ui.btn_toggle_map.setStyleSheet("background-color: #444;")
-            
-    def update_map_display(self):
-        """Actualizar la visualización del mapa con datos simulados"""
-        if self.mavproxy_running and self.subscriptions_active:
-            try:
-                # Obtener datos de telemetría
-                gps_data = self.ros_manager.telemetry_data['gps']
-                altitude = self.ros_manager.telemetry_data['altitude']
-                heading = self.ros_manager.telemetry_data['heading']
-                
-                # Crear representación visual del mapa
-                map_text = "Mapa MAVProxy\n"
-                map_text += "---\n"
-                
-                if gps_data and gps_data['lat'] != 0 and gps_data['lon'] != 0:
-                    map_text += f"Lat: {gps_data['lat']:.6f}\n"
-                    map_text += f"Lon: {gps_data['lon']:.6f}\n"
-                    map_text += f"Alt: {altitude:.1f}m\n"
-                    map_text += f"Head: {heading:.0f}°\n"
-                    
-                    # Representación visual simple del dron
-                    map_text += "---\n"
-                    map_text += "    ^ N\n"
-                    map_text += "    |\n"
-                    map_text += "W --+-- E\n"
-                    map_text += "    |\n"
-                    map_text += "    v S\n"
-                    map_text += "---\n"
-                    map_text += f"🛩️ Pos: ({gps_data['lat']:.4f}, {gps_data['lon']:.4f})"
-                else:
-                    map_text += "Esperando datos GPS...\n"
-                    map_text += "Conectando con el dron"
-                    
-                self.ui.map_label.setText(map_text)
-                
-            except Exception as e:
-                print(f"Error actualizando mapa: {e}")
-                self.ui.map_label.setText("Mapa MAVProxy\n---\nError actualizando\nVerifique conexión")
         
     def launch_qgc(self):
         """Iniciar QGroundControl"""
@@ -339,5 +259,4 @@ class DroneGUI(QWidget):
     def closeEvent(self, event):
         self.ros_manager.stop_subscriptions()
         self.camera_timer.stop()
-        self.map_timer.stop()
         event.accept()
